@@ -1,16 +1,17 @@
-import { AddContacts } from "./AddContacts/AddContacts.jsx";
-import { ContactList } from "./ContactList/ContactList.jsx";
-import { Filter } from "./Filter/Filter.jsx"
-import css from './App.module.css'
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchContacts } from "./redux/operations.js";
-import { getError, getIsLoading } from "./redux/selectors.js";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsLoading, selectError } from './redux/selectors';
+import { fetchContacts } from './redux/operations';
+import css from './App.module.css';
+import { ContactList } from '../components/ContactList/ContactList';
+import { ContactForm } from '../components/ContactForm/ContactForm';
+import { Loader } from '../components/Loader/Loader';
+import { Filter } from '../components/Filter/Filter';
 
 export const App = () => {
   const dispatch = useDispatch();
-  const isLoading = useSelector(getIsLoading);
-  const error = useSelector(getError);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
 
   useEffect(() => {
     dispatch(fetchContacts());
@@ -18,16 +19,13 @@ export const App = () => {
 
   return (
     <div className={css.container}>
+      {isLoading && !error && <Loader />}
       <div>
         <h1>Phonebook</h1>
-        <AddContacts />
-      </div>
-      <div>
+        <ContactForm />
         <h2>Contacts</h2>
         <Filter />
-        <ContactList >
-          {isLoading && !error && <b>Request in progress...</b>}
-        </ContactList>
+        <ContactList error={error} />
       </div>
     </div>
   );
