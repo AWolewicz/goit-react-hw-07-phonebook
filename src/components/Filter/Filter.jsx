@@ -4,11 +4,12 @@ import { nanoid } from '@reduxjs/toolkit';
 
 export const Filter = () => {
     const dispatch = useDispatch();
-
     const filterInput = nanoid();
 
     const handleChange = event => {
-        dispatch(setFilter(event.target.value));
+        const filter = event.target.value;
+        dispatch(setFilter(filter));
+        console.log(filter)
     };
 
     return (
